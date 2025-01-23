@@ -73,20 +73,31 @@ class Result {
   String toRawJson() => json.encode(toJson());
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
-        adult: json["adult"],
-        backdropPath: json["backdrop_path"],
-        genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
-        id: json["id"],
-        originalLanguage: json["original_language"],
-        originalTitle: json["original_title"],
-        overview: json["overview"],
-        popularity: json["popularity"]?.toDouble(),
-        posterPath: json["poster_path"],
-        releaseDate: DateTime.parse(json["release_date"]),
-        title: json["title"],
-        video: json["video"],
-        voteAverage: json["vote_average"]?.toDouble(),
-        voteCount: json["vote_count"],
+        adult: json["adult"] ?? false, // Mặc định là false nếu null
+        backdropPath: json["backdrop_path"], // Giữ null nếu không có giá trị
+        genreIds: (json["genre_ids"] != null)
+            ? List<int>.from(json["genre_ids"].map((x) => x))
+            : [], // Trả về danh sách rỗng nếu null
+        id: json["id"] ?? 0, // Mặc định là 0 nếu null
+        originalLanguage:
+            json["original_language"] ?? "unknown", // Giá trị mặc định
+        originalTitle:
+            json["original_title"] ?? "No title available", // Giá trị mặc định
+        overview:
+            json["overview"] ?? "No overview available", // Giá trị mặc định
+        popularity:
+            json["popularity"]?.toDouble() ?? 0.0, // Mặc định là 0.0 nếu null
+        posterPath: json["poster_path"], // Giữ null nếu không có giá trị
+        releaseDate: (json["release_date"] != null &&
+                json["release_date"] != "")
+            ? DateTime.tryParse(json["release_date"]) ?? DateTime(1970, 1, 1)
+            : DateTime(
+                1970, 1, 1), // Mặc định là 1/1/1970 nếu null hoặc không hợp lệ
+        title: json["title"] ?? "No title available", // Giá trị mặc định
+        video: json["video"] ?? false, // Mặc định là false nếu null
+        voteAverage:
+            json["vote_average"]?.toDouble() ?? 0.0, // Mặc định là 0.0 nếu null
+        voteCount: json["vote_count"] ?? 0, // Mặc định là 0 nếu null
       );
 
   Map<String, dynamic> toJson() => {

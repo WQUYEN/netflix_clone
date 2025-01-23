@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/models/movie_recommendation_model.dart';
 import 'package:netflix_clone/models/search_model.dart';
+import 'package:netflix_clone/screens/detail/movie_detail_screen.dart';
 import 'package:netflix_clone/services/api_services.dart';
 
 import '../../common/utils.dart';
@@ -103,30 +104,44 @@ class _SearchScreenState extends State<SearchScreen> {
                                   physics: NeverScrollableScrollPhysics(),
                                   scrollDirection: Axis.vertical,
                                   itemBuilder: (context, index) {
-                                    return Container(
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              4,
-                                      margin: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.network(
-                                              "$imageUrl${data?[index].posterPath}"),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              '${data?[index].originalTitle}',
-                                              maxLines: 2,
+                                    return InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MovieDetailScreen(
+                                                    movieId: data![index].id,
+                                                  )),
+                                        );
+                                      },
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                6,
+                                        margin: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Image.network(
+                                                "$imageUrl${data?[index].posterPath}"),
+                                            SizedBox(
+                                              width: 10,
                                             ),
-                                          ),
-                                        ],
+                                            Expanded(
+                                              child: Text(
+                                                '${data?[index].originalTitle}',
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     );
                                   })
@@ -152,35 +167,50 @@ class _SearchScreenState extends State<SearchScreen> {
                                   crossAxisSpacing: 3,
                                   childAspectRatio: 1.2 / 2),
                           itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                searchModel!.results[index].backdropPath != null
-                                    ? CachedNetworkImage(
-                                        imageUrl:
-                                            "$imageUrl${searchModel!.results[index].posterPath}",
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                5,
-                                        placeholder: (context, url) =>
-                                            CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(Icons.error),
-                                      )
-                                    : Image.asset(
-                                        "assets/images/netflix.png",
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                5,
-                                      ),
-                                Expanded(
-                                  child: Text(
-                                    searchModel!.results[index].originalTitle,
-                                    style: TextStyle(fontSize: 14),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MovieDetailScreen(
+                                            movieId:
+                                                searchModel!.results[index].id,
+                                          )),
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  searchModel!.results[index].backdropPath !=
+                                          null
+                                      ? CachedNetworkImage(
+                                          imageUrl:
+                                              "$imageUrl${searchModel!.results[index].posterPath}",
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              5,
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
+                                        )
+                                      : Image.asset(
+                                          "assets/images/netflix.png",
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              5,
+                                        ),
+                                  Expanded(
+                                    child: Text(
+                                      searchModel!.results[index].originalTitle,
+                                      style: TextStyle(fontSize: 14),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             );
                           }),
             ],

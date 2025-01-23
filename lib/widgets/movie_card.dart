@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:netflix_clone/common/utils.dart';
 import 'package:netflix_clone/models/movie_model.dart';
 
+import '../screens/detail/movie_detail_screen.dart';
+
 class MovieCard extends StatelessWidget {
-  const MovieCard(
-      {super.key, required this.future, required this.headLineText});
+  const MovieCard({
+    super.key,
+    required this.future,
+    required this.headLineText,
+  });
   final Future<MovieModel> future;
   final String headLineText;
 
@@ -36,13 +41,24 @@ class MovieCard extends StatelessWidget {
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.only(right: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MovieDetailScreen(
+                                        movieId: data![index].id,
+                                      )),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(right: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Image.network(
+                                "$imageUrl${data?[index].posterPath}"),
                           ),
-                          child: Image.network(
-                              "$imageUrl${data?[index].posterPath}"),
                         );
                       }),
                 )

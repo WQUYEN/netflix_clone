@@ -3,8 +3,10 @@ import 'package:netflix_clone/models/movie_model.dart';
 import 'package:netflix_clone/models/tv_series_model.dart';
 import 'package:netflix_clone/widgets/movie_card.dart';
 
+import '../../common/utils.dart';
 import '../../services/api_services.dart';
 import '../../widgets/custom_carousel.dart';
+import '../search/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,13 +33,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kBackgroundColor,
         title: Image.asset(
           "assets/images/logo.png",
           height: 50,
         ),
         actions: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchScreen(),
+                ),
+              );
+            },
             child: const Icon(
               Icons.search,
               color: Colors.white,
@@ -48,11 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 20,
           ),
           ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: Container(
-              color: Colors.blue,
-              width: 27,
-              height: 27,
+            borderRadius: BorderRadius.circular(10),
+            child: Icon(
+              Icons.person,
+              color: Colors.white,
+              size: 28,
             ),
           ),
           SizedBox(
@@ -85,9 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 20,
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 4,
-              child: MovieCard(future: movies, headLineText: 'Upcoming Movies'),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height / 4,
+                child:
+                    MovieCard(future: movies, headLineText: 'Upcoming Movies'),
+              ),
             ),
           ],
         ),
